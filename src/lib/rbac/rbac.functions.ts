@@ -22,7 +22,8 @@ export const listMyAccess = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator(noInput)
   .handler(async ({ context }) => {
-    const sb = context.supabase as any;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
     const [rolesRes, permsRes, pagesRes] = await Promise.all([
       sb.from("user_roles").select("role").eq("user_id", context.userId),
       sb.rpc("list_my_permissions"),
@@ -59,7 +60,8 @@ export const syncPageRegistry = createServerFn({ method: "POST" })
       "manage_permissions",
       "sync_page_registry",
     );
-    const sb = context.supabase as any;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
     const rows = PAGE_REGISTRY.map((p) => ({
       key: p.key,
       label: p.label,
