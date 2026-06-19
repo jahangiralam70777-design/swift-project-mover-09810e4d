@@ -282,8 +282,8 @@ function PagesGrid({ data }: { data: any }) {
                 <th key={role} className="px-3 py-3 text-center font-medium">
                   <span className="flex flex-col items-center gap-0.5">
                     {getRoleDisplayName(role)}
-                    {(role === "super_admin" || role === "admin") && (
-                      <Lock className="h-3 w-3 text-muted-foreground" aria-label="full access" />
+                    {role === "super_admin" && (
+                      <Lock className="h-3 w-3 text-muted-foreground" aria-label="locked" />
                     )}
                   </span>
                 </th>
