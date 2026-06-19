@@ -22,8 +22,7 @@ export const listMyAccess = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator(noInput)
   .handler(async ({ context }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const sb = supabaseAdmin as any;
+    const sb = context.supabase as any;
     const [rolesRes, permsRes, pagesRes] = await Promise.all([
       sb.from("user_roles").select("role").eq("user_id", context.userId),
       sb.rpc("list_my_permissions"),
@@ -190,7 +189,8 @@ export const toggleRolePageAccess = createServerFn({ method: "POST" })
     if (data.role === "super_admin") {
       throw new Error("super_admin page access is immutable");
     }
-    const sb = context.supabase as any;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
     if (data.enabled) {
       const { error } = await sb
         .from("page_access")
