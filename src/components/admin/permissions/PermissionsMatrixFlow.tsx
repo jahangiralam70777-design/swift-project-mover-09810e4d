@@ -308,7 +308,7 @@ function PagesGrid({ data }: { data: any }) {
                       <div className="text-[11px] text-muted-foreground">{page.route}</div>
                     </td>
                     {data.roles.map((role: string) => {
-                      const locked = role === "super_admin" || role === "admin";
+                      const locked = role === "super_admin";
                       const checked = locked || grantSet.has(`${role}::${page.key}`);
                       return (
                         <td key={role} className="px-3 py-2 text-center">
