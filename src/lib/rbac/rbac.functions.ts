@@ -22,7 +22,8 @@ export const listMyAccess = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator(noInput)
   .handler(async ({ context }) => {
-    const sb = context.supabase as any;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
     const [rolesRes, permsRes, pagesRes] = await Promise.all([
       sb.from("user_roles").select("role").eq("user_id", context.userId),
       sb.rpc("list_my_permissions"),
@@ -203,7 +204,7 @@ export const toggleRolePageAccess = createServerFn({ method: "POST" })
         .eq("page_key", data.page_key);
       if (error) throw new Error(error.message);
     }
-    await sb.rpc("record_permission_audit", {
+    await (context.supabase as any).rpc("record_permission_audit", {
       _action: data.enabled ? "grant_page" : "revoke_page",
       _target_role: data.role,
       _target_page: data.page_key,
