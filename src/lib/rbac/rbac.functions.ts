@@ -59,7 +59,8 @@ export const syncPageRegistry = createServerFn({ method: "POST" })
       "manage_permissions",
       "sync_page_registry",
     );
-    const sb = context.supabase as any;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
     const rows = PAGE_REGISTRY.map((p) => ({
       key: p.key,
       label: p.label,
@@ -87,7 +88,8 @@ export const listPermissionMatrix = createServerFn({ method: "GET" })
       "manage_permissions",
       "list_matrix",
     );
-    const sb = context.supabase as any;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
     const [rpRes, paRes, pagesRes] = await Promise.all([
       sb.from("role_permissions").select("role, permission"),
       sb.from("page_access").select("role, page_key"),
@@ -156,7 +158,7 @@ export const toggleRolePermission = createServerFn({ method: "POST" })
         .eq("permission", data.permission);
       if (error) throw new Error(error.message);
     }
-    await sb.rpc("record_permission_audit", {
+    await (context.supabase as any).rpc("record_permission_audit", {
       _action: data.enabled ? "grant_permission" : "revoke_permission",
       _target_role: data.role,
       _target_permission: data.permission,
@@ -187,7 +189,8 @@ export const toggleRolePageAccess = createServerFn({ method: "POST" })
     if (data.role === "super_admin") {
       throw new Error("super_admin page access is immutable");
     }
-    const sb = context.supabase as any;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
     if (data.enabled) {
       const { error } = await sb
         .from("page_access")
@@ -201,7 +204,7 @@ export const toggleRolePageAccess = createServerFn({ method: "POST" })
         .eq("page_key", data.page_key);
       if (error) throw new Error(error.message);
     }
-    await sb.rpc("record_permission_audit", {
+    await (context.supabase as any).rpc("record_permission_audit", {
       _action: data.enabled ? "grant_page" : "revoke_page",
       _target_role: data.role,
       _target_page: data.page_key,

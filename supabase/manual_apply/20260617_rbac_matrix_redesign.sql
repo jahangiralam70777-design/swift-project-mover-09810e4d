@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS public.page_access (
   PRIMARY KEY (role, page_key)
 );
 CREATE INDEX IF NOT EXISTS page_access_page_key_idx ON public.page_access(page_key);
-GRANT SELECT ON public.page_access TO authenticated;
-GRANT ALL    ON public.page_access TO service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.page_access TO authenticated;
+GRANT ALL ON public.page_access TO service_role;
 ALTER TABLE public.page_access ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "page_access read for authenticated" ON public.page_access;
 CREATE POLICY "page_access read for authenticated" ON public.page_access
