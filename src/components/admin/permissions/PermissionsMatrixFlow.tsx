@@ -282,8 +282,8 @@ function PagesGrid({ data }: { data: any }) {
                 <th key={role} className="px-3 py-3 text-center font-medium">
                   <span className="flex flex-col items-center gap-0.5">
                     {getRoleDisplayName(role)}
-                    {(role === "super_admin" || role === "admin") && (
-                      <Lock className="h-3 w-3 text-muted-foreground" aria-label="full access" />
+                    {role === "super_admin" && (
+                      <Lock className="h-3 w-3 text-muted-foreground" aria-label="locked" />
                     )}
                   </span>
                 </th>
@@ -308,7 +308,7 @@ function PagesGrid({ data }: { data: any }) {
                       <div className="text-[11px] text-muted-foreground">{page.route}</div>
                     </td>
                     {data.roles.map((role: string) => {
-                      const locked = role === "super_admin" || role === "admin";
+                      const locked = role === "super_admin";
                       const checked = locked || grantSet.has(`${role}::${page.key}`);
                       return (
                         <td key={role} className="px-3 py-2 text-center">
