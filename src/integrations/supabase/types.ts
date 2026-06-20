@@ -14,16 +14,193 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_action_log: {
+        Row: {
+          action: string | null
+          allowed: boolean
+          created_at: string
+          id: string
+          metadata: Json | null
+          permission: string
+          user_id: string | null
+        }
+        Insert: {
+          action?: string | null
+          allowed?: boolean
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          permission?: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string | null
+          allowed?: boolean
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          permission?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      auth_access_controls: {
+        Row: {
+          created_at: string
+          id: number
+          login_auto_enable_at: string | null
+          login_enabled: boolean
+          login_message_description: string
+          login_message_footer: string
+          login_message_subtitle: string
+          login_message_title: string
+          signup_auto_enable_at: string | null
+          signup_enabled: boolean
+          signup_message_description: string
+          signup_message_footer: string
+          signup_message_subtitle: string
+          signup_message_title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          login_auto_enable_at?: string | null
+          login_enabled?: boolean
+          login_message_description?: string
+          login_message_footer?: string
+          login_message_subtitle?: string
+          login_message_title?: string
+          signup_auto_enable_at?: string | null
+          signup_enabled?: boolean
+          signup_message_description?: string
+          signup_message_footer?: string
+          signup_message_subtitle?: string
+          signup_message_title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          login_auto_enable_at?: string | null
+          login_enabled?: boolean
+          login_message_description?: string
+          login_message_footer?: string
+          login_message_subtitle?: string
+          login_message_title?: string
+          signup_auto_enable_at?: string | null
+          signup_enabled?: boolean
+          signup_message_description?: string
+          signup_message_footer?: string
+          signup_message_subtitle?: string
+          signup_message_title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      auth_controls_can_bypass_student_gate: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
+      auth_controls_can_manage: { Args: { _user_id: string }; Returns: boolean }
+      get_auth_access_controls: {
+        Args: never
+        Returns: {
+          created_at: string
+          id: number
+          login_auto_enable_at: string | null
+          login_enabled: boolean
+          login_message_description: string
+          login_message_footer: string
+          login_message_subtitle: string
+          login_message_title: string
+          signup_auto_enable_at: string | null
+          signup_enabled: boolean
+          signup_message_description: string
+          signup_message_footer: string
+          signup_message_subtitle: string
+          signup_message_title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "auth_access_controls"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      hook_before_user_created: { Args: { event: Json }; Returns: Json }
+      hook_password_verification_attempt: {
+        Args: { event: Json }
+        Returns: Json
+      }
+      update_auth_access_controls: {
+        Args: { _payload: Json }
+        Returns: {
+          created_at: string
+          id: number
+          login_auto_enable_at: string | null
+          login_enabled: boolean
+          login_message_description: string
+          login_message_footer: string
+          login_message_subtitle: string
+          login_message_title: string
+          signup_auto_enable_at: string | null
+          signup_enabled: boolean
+          signup_message_description: string
+          signup_message_footer: string
+          signup_message_subtitle: string
+          signup_message_title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "auth_access_controls"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "student" | "user" | "super_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +327,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "student", "user", "super_admin"],
+    },
   },
 } as const
