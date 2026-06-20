@@ -21,7 +21,7 @@ export type Database = {
           created_at: string
           id: string
           metadata: Json | null
-          permission: string | null
+          permission: string
           user_id: string | null
         }
         Insert: {
@@ -30,7 +30,7 @@ export type Database = {
           created_at?: string
           id?: string
           metadata?: Json | null
-          permission?: string | null
+          permission?: string
           user_id?: string | null
         }
         Update: {
@@ -39,39 +39,63 @@ export type Database = {
           created_at?: string
           id?: string
           metadata?: Json | null
-          permission?: string | null
+          permission?: string
           user_id?: string | null
         }
         Relationships: []
       }
-      site_settings: {
+      auth_access_controls: {
         Row: {
           created_at: string
-          draft_value: Json
-          id: string
-          key: string
-          published_at: string | null
-          published_value: Json
+          id: number
+          login_auto_enable_at: string | null
+          login_enabled: boolean
+          login_message_description: string
+          login_message_footer: string
+          login_message_subtitle: string
+          login_message_title: string
+          signup_auto_enable_at: string | null
+          signup_enabled: boolean
+          signup_message_description: string
+          signup_message_footer: string
+          signup_message_subtitle: string
+          signup_message_title: string
           updated_at: string
           updated_by: string | null
         }
         Insert: {
           created_at?: string
-          draft_value?: Json
-          id?: string
-          key: string
-          published_at?: string | null
-          published_value?: Json
+          id?: number
+          login_auto_enable_at?: string | null
+          login_enabled?: boolean
+          login_message_description?: string
+          login_message_footer?: string
+          login_message_subtitle?: string
+          login_message_title?: string
+          signup_auto_enable_at?: string | null
+          signup_enabled?: boolean
+          signup_message_description?: string
+          signup_message_footer?: string
+          signup_message_subtitle?: string
+          signup_message_title?: string
           updated_at?: string
           updated_by?: string | null
         }
         Update: {
           created_at?: string
-          draft_value?: Json
-          id?: string
-          key?: string
-          published_at?: string | null
-          published_value?: Json
+          id?: number
+          login_auto_enable_at?: string | null
+          login_enabled?: boolean
+          login_message_description?: string
+          login_message_footer?: string
+          login_message_subtitle?: string
+          login_message_title?: string
+          signup_auto_enable_at?: string | null
+          signup_enabled?: boolean
+          signup_message_description?: string
+          signup_message_footer?: string
+          signup_message_subtitle?: string
+          signup_message_title?: string
           updated_at?: string
           updated_by?: string | null
         }
@@ -79,19 +103,19 @@ export type Database = {
       }
       user_roles: {
         Row: {
-          display_name: string | null
+          created_at: string
           id: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
-          display_name?: string | null
+          created_at?: string
           id?: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
-          display_name?: string | null
+          created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
@@ -103,30 +127,37 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      admin_get_db_size: { Args: never; Returns: number }
-      admin_get_db_size_for_user: {
+      auth_controls_can_bypass_student_gate: {
         Args: { _user_id: string }
-        Returns: number
+        Returns: boolean
       }
-      admin_get_table_sizes: {
+      auth_controls_can_manage: { Args: { _user_id: string }; Returns: boolean }
+      get_auth_access_controls: {
         Args: never
         Returns: {
-          row_estimate: number
-          size_bytes: number
-          table_name: string
-        }[]
-      }
-      admin_get_table_sizes_for_user: {
-        Args: { _user_id: string }
-        Returns: {
-          row_estimate: number
-          size_bytes: number
-          table_name: string
-        }[]
-      }
-      has_permission: {
-        Args: { _permission: string; _user_id: string }
-        Returns: boolean
+          created_at: string
+          id: number
+          login_auto_enable_at: string | null
+          login_enabled: boolean
+          login_message_description: string
+          login_message_footer: string
+          login_message_subtitle: string
+          login_message_title: string
+          signup_auto_enable_at: string | null
+          signup_enabled: boolean
+          signup_message_description: string
+          signup_message_footer: string
+          signup_message_subtitle: string
+          signup_message_title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "auth_access_controls"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       has_role: {
         Args: {
@@ -135,18 +166,41 @@ export type Database = {
         }
         Returns: boolean
       }
-      record_admin_action: {
-        Args: {
-          _action: string
-          _allowed: boolean
-          _metadata: Json
-          _permission: string
+      hook_before_user_created: { Args: { event: Json }; Returns: Json }
+      hook_password_verification_attempt: {
+        Args: { event: Json }
+        Returns: Json
+      }
+      update_auth_access_controls: {
+        Args: { _payload: Json }
+        Returns: {
+          created_at: string
+          id: number
+          login_auto_enable_at: string | null
+          login_enabled: boolean
+          login_message_description: string
+          login_message_footer: string
+          login_message_subtitle: string
+          login_message_title: string
+          signup_auto_enable_at: string | null
+          signup_enabled: boolean
+          signup_message_description: string
+          signup_message_footer: string
+          signup_message_subtitle: string
+          signup_message_title: string
+          updated_at: string
+          updated_by: string | null
         }
-        Returns: undefined
+        SetofOptions: {
+          from: "*"
+          to: "auth_access_controls"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user" | "student" | "super_admin"
+      app_role: "admin" | "moderator" | "student" | "user" | "super_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -274,7 +328,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user", "student", "super_admin"],
+      app_role: ["admin", "moderator", "student", "user", "super_admin"],
     },
   },
 } as const
