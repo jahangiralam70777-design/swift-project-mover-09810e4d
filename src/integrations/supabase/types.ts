@@ -44,6 +44,39 @@ export type Database = {
         }
         Relationships: []
       }
+      app_pages: {
+        Row: {
+          created_at: string
+          description: string | null
+          enabled: boolean
+          group: string
+          key: string
+          label: string
+          route: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          group?: string
+          key: string
+          label: string
+          route: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          group?: string
+          key?: string
+          label?: string
+          route?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       auth_access_controls: {
         Row: {
           created_at: string
@@ -98,6 +131,92 @@ export type Database = {
           signup_message_title?: string
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      page_access: {
+        Row: {
+          created_at: string
+          page_key: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          created_at?: string
+          page_key: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          created_at?: string
+          page_key?: string
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_access_page_key_fkey"
+            columns: ["page_key"]
+            isOneToOne: false
+            referencedRelation: "app_pages"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      permission_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          target_page: string | null
+          target_permission: string | null
+          target_role: Database["public"]["Enums"]["app_role"] | null
+          target_user_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          target_page?: string | null
+          target_permission?: string | null
+          target_role?: Database["public"]["Enums"]["app_role"] | null
+          target_user_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          target_page?: string | null
+          target_permission?: string | null
+          target_role?: Database["public"]["Enums"]["app_role"] | null
+          target_user_id?: string | null
+        }
+        Relationships: []
+      }
+      role_permissions: {
+        Row: {
+          created_at: string
+          permission: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          permission: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          permission?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -159,6 +278,14 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      has_page_access: {
+        Args: { _page_key: string; _user_id: string }
+        Returns: boolean
+      }
+      has_permission: {
+        Args: { _permission: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -171,6 +298,20 @@ export type Database = {
         Args: { event: Json }
         Returns: Json
       }
+      list_my_pages: {
+        Args: never
+        Returns: {
+          page_key: string
+        }[]
+      }
+      list_my_permissions: {
+        Args: never
+        Returns: {
+          permission: string
+        }[]
+      }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       update_auth_access_controls: {
         Args: { _payload: Json }
         Returns: {
