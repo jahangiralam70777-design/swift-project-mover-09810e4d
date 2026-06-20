@@ -14,139 +14,16 @@ export type Database = {
   }
   public: {
     Tables: {
-      admin_action_log: {
-        Row: {
-          action: string | null
-          allowed: boolean
-          created_at: string
-          id: string
-          metadata: Json | null
-          permission: string | null
-          user_id: string | null
-        }
-        Insert: {
-          action?: string | null
-          allowed?: boolean
-          created_at?: string
-          id?: string
-          metadata?: Json | null
-          permission?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          action?: string | null
-          allowed?: boolean
-          created_at?: string
-          id?: string
-          metadata?: Json | null
-          permission?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      site_settings: {
-        Row: {
-          created_at: string
-          draft_value: Json
-          id: string
-          key: string
-          published_at: string | null
-          published_value: Json
-          updated_at: string
-          updated_by: string | null
-        }
-        Insert: {
-          created_at?: string
-          draft_value?: Json
-          id?: string
-          key: string
-          published_at?: string | null
-          published_value?: Json
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Update: {
-          created_at?: string
-          draft_value?: Json
-          id?: string
-          key?: string
-          published_at?: string | null
-          published_value?: Json
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          display_name: string | null
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          display_name?: string | null
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          display_name?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      admin_get_db_size: { Args: never; Returns: number }
-      admin_get_db_size_for_user: {
-        Args: { _user_id: string }
-        Returns: number
-      }
-      admin_get_table_sizes: {
-        Args: never
-        Returns: {
-          row_estimate: number
-          size_bytes: number
-          table_name: string
-        }[]
-      }
-      admin_get_table_sizes_for_user: {
-        Args: { _user_id: string }
-        Returns: {
-          row_estimate: number
-          size_bytes: number
-          table_name: string
-        }[]
-      }
-      has_permission: {
-        Args: { _permission: string; _user_id: string }
-        Returns: boolean
-      }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-      record_admin_action: {
-        Args: {
-          _action: string
-          _allowed: boolean
-          _metadata: Json
-          _permission: string
-        }
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user" | "student" | "super_admin"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -273,8 +150,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["admin", "moderator", "user", "student", "super_admin"],
-    },
+    Enums: {},
   },
 } as const
