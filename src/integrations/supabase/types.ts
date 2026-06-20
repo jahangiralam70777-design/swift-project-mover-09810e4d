@@ -171,6 +171,8 @@ export type Database = {
         Args: { event: Json }
         Returns: Json
       }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       update_auth_access_controls: {
         Args: { _payload: Json }
         Returns: {
